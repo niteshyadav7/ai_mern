@@ -51,11 +51,38 @@ export const splitDocument = async (text) => {
 # Step 3: Embeddings & Vector Storage
 
 - services/embeddings.js
-  ```
-  import { OpenAIEmbeddings } from "@langchain/openai";
-  import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
-  import { supabase } from "../utils/supabaseClient.js";
-  ```
+
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
+import { supabase } from "../utils/supabaseClient.js";
+
+// Initialize OpenAI embeddings
+const embeddings = new OpenAIEmbeddings({
+model: "text-embedding-3-small",
+apiKey: process.env.OPENAI_API_KEY,
+});
+
+/\*\*
+
+- Stores document chunks into Supabase vector store
+- @param {Array} docs - Array of chunks from splitDocument
+- @param {string} user_id - User ID
+- @param {string} doc_name - Document name
+  \*/
+  export const storeChunksInSupabase = async (docs, user_id, doc_name) => {
+  await SupabaseVectorStore.fromDocuments(docs, embeddings, {
+  client: supabase,
+  tableName: "documents",
+  queryName: "match_documents",
+  metadata: { user_id, doc_name },
+  });
+  };
+
+```
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
+import { supabase } from "../utils/supabaseClient.js";
+```
 
 // Initialize OpenAI embeddings
 const embeddings = new OpenAIEmbeddings({
@@ -217,7 +244,6 @@ router.post("/", async (req, res) => {
 
 export default router;
 ```
-
 
 # Step 7: Backend Entry Point
 
