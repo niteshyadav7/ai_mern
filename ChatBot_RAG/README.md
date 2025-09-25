@@ -52,6 +52,7 @@ export const splitDocument = async (text) => {
 
 - services/embeddings.js
 
+```
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { supabase } from "../utils/supabaseClient.js";
@@ -70,6 +71,8 @@ apiKey: process.env.OPENAI_API_KEY,
   metadata: { user_id, doc_name },
   });
   };
+
+```
 
 ```
 import { OpenAIEmbeddings } from "@langchain/openai";
