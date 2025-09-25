@@ -62,13 +62,6 @@ model: "text-embedding-3-small",
 apiKey: process.env.OPENAI_API_KEY,
 });
 
-/\*\*
-
-- Stores document chunks into Supabase vector store
-- @param {Array} docs - Array of chunks from splitDocument
-- @param {string} user_id - User ID
-- @param {string} doc_name - Document name
-  \*/
   export const storeChunksInSupabase = async (docs, user_id, doc_name) => {
   await SupabaseVectorStore.fromDocuments(docs, embeddings, {
   client: supabase,
